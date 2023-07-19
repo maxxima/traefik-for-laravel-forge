@@ -1,51 +1,59 @@
-version: "3.7"
+version: 3.7
 networks:
-  web:
+  proxy:
     external: true
 
 services:
   traefik:
-    image: traefik:v2.3
+    image: traefik:v2.10
+    container_name: traefik"
     restart: always
     networks:
-      - web
+      - proxy
     ports:
       - "80:80"
       - "443:443"
       # Uncomment for debug
-      #- "8080:8080"
+      # - "8080:8080"
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock:ro
       - ./letsencrypt:/letsencrypt
       - ./traefik.auth:/auth/traefik.auth
     command:
-      - --api.dashboard=true
-      # Uncomment for debug
-      #- --api.insecure=true
-      - --entrypoints.http.address=:80
-      - --entrypoints.https.address=:443
+     # # Uncomment for debug
+     # - --api.insecure=true
+      - --entrypoints.web.address=:80
+     #- "--log.level=DEBUG"
+      - --api.insecure=true
       - --providers.docker=true
       - --providers.docker.exposedbydefault=false
-      - --certificatesresolvers.leresolver.acme.httpchallenge.entrypoint=http
-      - --certificatesresolvers.leresolver.acme.storage=/letsencrypt/acme.json
+      - --entrypoints.websecure.address=:443
+      - --certificatesresolvers.leresolver.acme.tlschallenge=true
+      #- --certificatesresolvers.leresolver.acme.caserver=https://acme-staging-v02.api.letsencrypt.org/directory
       - --certificatesresolvers.leresolver.acme.email=${LETS_ENCRYPT_EMAIL}
+      - --certificatesresolvers.leresolver.acme.storage=/letsencrypt/acme.json
     labels:
       ## TRAEFIK ROUTER & DASHBOARD
       - traefik.enable=true
-      - traefik.http.routers.traefik.entrypoints=https
+      - traefik.http.routers.traefik.entrypoints=websecure
       - traefik.http.routers.traefik.rule=Host(`${TRAEFIK_DASHBOARD_HOST}`)
       - traefik.http.routers.traefik.service=api@internal
       - traefik.http.routers.traefik.middlewares=auth
       - traefik.http.routers.traefik.tls.certresolver=leresolver
       - traefik.http.services.traefik.loadbalancer.server.port=8080
+      # https://github.com/traefik/traefik/issues/1254#issuecomment-299114960
+      # https://gist.github.com/thomas15v/a446ac1745829f5a6a5f19c574739af8
+      # Traefik was sometimes working, but only sometimes. Telling it specifically
+      # which network to choose to run on was what seemed to fix it.
+      - traefik.docker.network=proxy
 
       ## Global redirect to HTTPS
       - traefik.http.routers.http-catchall.rule=hostregexp(`{host:.+}`)
-      - traefik.http.routers.http-catchall.entrypoints=http
+      - traefik.http.routers.http-catchall.entrypoints=web
       - traefik.http.routers.http-catchall.middlewares=redirect-to-https
 
       ## Middlewares
-      - traefik.http.middlewares.redirect-to-https.redirectscheme.scheme=https
+      - traefik.http.middlewares.redirect-to-https.redirectscheme.scheme=websecure
 
       ## AUTH
       - traefik.http.middlewares.auth.basicauth.usersfile=/auth/traefik.auth
