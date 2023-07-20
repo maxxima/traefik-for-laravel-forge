@@ -38,13 +38,24 @@ chmod +x /usr/local/bin/docker-compose
 
 This is a slight modification of the [original version of the script](https://github.com/ijpatricio/docker-for-forge/blob/main/resources/forge-recipe.sh). I've added the `sudo` to add the `apt install -y docker-ce` line for consistency with the other `sudo app install` commands in the script. But, since the user for this script is `root`, I think you could potentially eliminate all use of `sudo` in the script entirely, but I did not try that in my tests. The [updated script](./forge-recipe-install-docker.sh) is also available in this repo.
 
+## DNS setup
+
+You will need to set up DNS to point your domain name with an A record to your server you've created with Laravel Forge. For example, `traefik.yourdomain.com` should point to your server's IP address.
+
+## Setting up the `.env` file
+
+In the .env file, set `TRAEFIK_DASHBOARD_HOST` to this domain name. For example, `analytics.yourdomain.com`. No `https://` or `http://` is needed.
+
+Use the [`example.env`](/example.env) for reference in setting up the additional environmental variables.
+
 ## Other repositories
 
 As mentioned in the intro, there is an accompanying repo for Plausible Analytics. I also created a basic static website repo for testing purposes. Here are links to both repos.
 
-1. A basic static website that is used as an example for Traefik to route to
-https://github.com/johnfmorton/example-static-docker-website-for-traefik
+
 1. The Plausible Analytics docker-compose file that hosts the Plausible Analytics service. It has been modified slightly to work with Traefik. https://github.com/johnfmorton/plausible-with-traefik-update-for-laravel-forge
+2. A basic static website that is used as an example for Traefik to route to
+https://github.com/johnfmorton/example-static-docker-website-for-traefik. This is the repo I used during my debugging process. It's a very basic static website that I used to test Traefik routing. It displays a "Hello World" message if you can successfully reach it.
 
 
 ## Reference links
@@ -56,9 +67,11 @@ I referenced and borrowed from all of the following links. I'm grateful the auth
 * https://plausible.io/docs/self-hosting
 * https://www.digitalocean.com/community/tutorials/how-to-use-traefik-as-a-reverse-proxy-for-docker-containers-on-ubuntu-20-04
 
-## Original instructions
+## Additional notes
 
-The original README from the Traefik repository is below.
+The original README from the Traefik repository is below. The command sets up the basic auth used to protect your Traefik dashboard.
+
+### Original instructions from forked repo
 
 Step 1. Deploy Script
 Refer to (deploy script)[./Taskfile], in function `baseDeployScript`
@@ -68,5 +81,4 @@ Step 2. Configure ENV variables, and set Traefik Dashboard password
 ```
 ./Taskfile copyEnv
 ./Taskfile auth username password
-
 ```
