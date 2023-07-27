@@ -1,10 +1,10 @@
-# Traefik for Laravel Forge
+# Traefik Proxy for Laravel Forge
 
 [![Laravel Forge Site Deployment Status](https://img.shields.io/endpoint?url=https%3A%2F%2Fforge.laravel.com%2Fsite-badges%2Fed322e5f-fb4d-4ab8-9fab-d0d54ce4f4e3%3Fdate%3D1%26commit%3D1&style=plastic)](https://forge.laravel.com/servers/699880/sites/2038639)
 
-This repo was forked from https://github.com/ijpatricio/traefik-for-forge.
+[Traefik Proxy](https://doc.traefik.io/traefik/) will help you get routing configured on your server between multiple services.
 
-There is an original blog post that accompanied that repo, https://blog.jpat.dev/how-to-deploy-docker-applications-with-laravel-forge, that gives a great overview of how to set up Traefik on Laravel Forge. That post was very helpful in getting Traefik working on Laravel Forge.
+This repo is a fork of [ijpatricio/traefik-for-forge](https://github.com/ijpatricio/traefik-for-forge), so be sure to check that out. There is an original blog post that accompanied that repo, https://blog.jpat.dev/how-to-deploy-docker-applications-with-laravel-forge, that gives a great overview of how to set up Traefik on Laravel Forge. That post was very helpful in getting Traefik working on Laravel Forge.
 
 However, the post didn't allow me to get Plausible Analytics working with Traefik.
 
@@ -12,11 +12,17 @@ The TLDR was that Traefik and Plausible were not always defaulting to use the sa
 
 This forked repo is an attempt to share what I discovered when getting Plausible to work with Traefik. This repo shows how I have Traefik configured to run on Laravel Forge.
 
-You'll probably also want to check out the accompanying repo for Plausbile Analytics, [johnfmorton/plausible-with-traefik-update-for-laravel-forge](https://github.com/johnfmorton/plausible-with-traefik-update-for-laravel-forge). Specifically, check out the [Traefik reverse proxy file](https://github.com/johnfmorton/plausible-with-traefik-update-for-laravel-forge/blob/master/reverse-proxy/traefik/docker-compose.traefik.yml) in that repo where you will find refereces to the `proxy` network defined here.
+## Getting started
+
+If you're just going to dive right in without reading the [original post](https://blog.jpat.dev/how-to-deploy-docker-applications-with-laravel-forge), be sure to set up the most basic server in Laravel Forge, a _Worker Server_, because it will have only minimal services installed. You'll need to install Docker and Docker Compose on your server. I've included a Laravel Forge Recipe that you can use to install Docker and Docker Compose. See the [Laravel Forge preparation](#laravel-forge-preparation) section below for more details.
+
+Another repo that I created for testing purposes is available at [johnfmorton/example-static-docker-website-for-traefik](https://github.com/johnfmorton/example-static-docker-website-for-traefik). This is the repo I used during my debugging process. It's a very basic static website that I used to test Traefik routing. It displays a "Hello World" message if you can successfully reach it. This repo was useful because it helped me prove to myself that my Traefik Proxy was working correctly. Notice the references to the `proxy` network in the [docker-compose.yml](https://github.com/johnfmorton/example-static-docker-website-for-traefik/blob/main/docker-compose.yml) of that repo.
+
+Lastly, you'll probably also want to check out the accompanying repo for Plausbile Analytics, [johnfmorton/plausible-with-traefik-update-for-laravel-forge](https://github.com/johnfmorton/plausible-with-traefik-update-for-laravel-forge). Specifically, check out the [Traefik reverse proxy file](https://github.com/johnfmorton/plausible-with-traefik-update-for-laravel-forge/blob/master/reverse-proxy/traefik/docker-compose.traefik.yml) in that repo where you will find refereces to the `proxy` network defined in this Traefik repo.
 
 ## Laravel Forge preparation
 
-The repo assumes you have Docker installed already. If you don't, you can install it with the following set of commands. You run them as `root` user. The commands are ideally set up as a Recipe in Laravel Forge so that you can reuse them across multiple servers.
+This Traefik Proxy repo assumes you have Docker installed already. If you don't, you can install it with the following set of commands. You run them as `root` user. The commands are ideally set up as a Recipe in Laravel Forge so that you can reuse them across multiple servers.
 
 ```
 # Recipe Name: Install Docker and Docker-Compose
