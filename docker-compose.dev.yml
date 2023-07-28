@@ -52,14 +52,23 @@ services:
       # which network to choose to run on was what seemed to fix it.
       - traefik.docker.network=proxy
 
-      ## Global redirect to HTTPS
-      #- traefik.http.routers.http-catchall.rule=hostregexp(`{host:.+}`)
-      - traefik.http.routers.http-catchall.rule=Host(`${TRAEFIK_DASHBOARD_HOST}`)
-      - traefik.http.routers.http-catchall.entrypoints=web
-      - traefik.http.routers.http-catchall.middlewares=redirect-to-https
-
-      ## Middlewares
+      ## Middleware for http to https redirect
       - traefik.http.middlewares.redirect-to-https.redirectscheme.scheme=websecure
 
       ## AUTH
       - traefik.http.middlewares.auth.basicauth.usersfile=/auth/traefik.auth
+
+      ## Catch-all redirect to domain
+      - traefik.http.routers.catchall.rule=hostregexp(`{any:.+}`)
+      - traefik.http.routers.catchall.entrypoints=web
+      - traefik.http.routers.catchall.middlewares=redirect
+
+      ## Middleware
+      - traefik.http.middlewares.redirect.redirectregex.regex=.*
+      - traefik.http.middlewares.redirect.redirectregex.replacement=https://example.com
+
+      ## Global redirect to HTTPS
+      #- traefik.http.routers.http-catchall.rule=hostregexp(`{host:.+}`)
+      #- traefik.http.routers.http-catchall.rule=Host(`${TRAEFIK_DASHBOARD_HOST}`)
+      #- traefik.http.routers.http-catchall.entrypoints=web
+      #- traefik.http.routers.http-catchall.middlewares=redirect-to-https
