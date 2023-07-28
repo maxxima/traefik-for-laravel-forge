@@ -37,6 +37,10 @@ services:
       - traefik.enable=true
       - traefik.http.routers.traefik.entrypoints=websecure
       - traefik.http.routers.traefik.rule=Host(`${TRAEFIK_DASHBOARD_HOST}`)
+      ## TLS - https://docs.traefik.io/https/tls/
+      ## Specifically, we don't allow connections via the IP address, only via the domain name
+      ## https://doc.traefik.io/traefik/https/tls/#strict-sni-checking
+      - traefik.http.routers.myrouter.tls.options.default.sniStrict=true
       - traefik.http.routers.traefik.service=api@internal
       - traefik.http.routers.traefik.middlewares=auth
       - traefik.http.routers.traefik.tls.certresolver=leresolver
@@ -57,11 +61,3 @@ services:
 
       ## AUTH
       - traefik.http.middlewares.auth.basicauth.usersfile=/auth/traefik.auth
-
-    ## TLS - https://docs.traefik.io/https/tls/
-    ## Specifically, we don't allow connections via the IP address, only via the domain name
-    ## https://doc.traefik.io/traefik/https/tls/#strict-sni-checking
-    tls:
-      options:
-        default:
-          sniStrict: true
