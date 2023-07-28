@@ -40,7 +40,7 @@ services:
       ## TLS - https://docs.traefik.io/https/tls/
       ## Specifically, we don't allow connections via the IP address, only via the domain name
       ## https://doc.traefik.io/traefik/https/tls/#strict-sni-checking
-      - traefik.http.routers.myrouter.tls.options.default.sniStrict=true
+      ## - traefik.http.routers.myrouter.tls.options.default.sniStrict=true
       - traefik.http.routers.traefik.service=api@internal
       - traefik.http.routers.traefik.middlewares=auth
       - traefik.http.routers.traefik.tls.certresolver=leresolver
