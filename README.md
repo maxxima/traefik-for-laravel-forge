@@ -88,3 +88,8 @@ Step 2. Configure ENV variables, and set Traefik Dashboard password
 ./Taskfile copyEnv
 ./Taskfile auth username password
 ```
+
+## License
+
+The source code for the site is licensed under the MIT license, which you can find in
+the MIT-LICENSE.txt file.
