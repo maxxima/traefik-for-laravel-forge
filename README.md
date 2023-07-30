@@ -50,9 +50,13 @@ You will need to set up DNS to point your domain name with an A record to your s
 
 ## Setting up the `.env` file
 
-In the .env file, set `TRAEFIK_DASHBOARD_HOST` to this domain name. For example, `analytics.yourdomain.com`. No `https://` or `http://` is needed.
+In the .env file, set `TRAEFIK_DASHBOARD_HOST` to this domain name. For example, `analytics.yourdomain.com`. No `https://` or `http://` is needed. This is the URL were you Traefik dashboard will be available.
 
-Use the [`example.env`](/example.env) for reference in setting up the additional environmental variables.
+The `LETS_ENCRYPT_EMAIL` is the email address that will be used to register your SSL certificate with Let's Encrypt. This is required for Traefik to work.
+
+The `REDIRECT_IP_ADDRESS_TO_URL` is a URL that will be used as a catch-all if someone tries to visit your IP address.
+
+See the [`example.env`](/example.env) for reference.
 
 ## Other repositories
 
