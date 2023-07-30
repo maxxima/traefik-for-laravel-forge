@@ -61,4 +61,4 @@ services:
 
       ## Middleware to catch all and redirect to domain, in this case, supergeekery.com, but update to your domain
       - traefik.http.middlewares.redirect.redirectregex.regex=.*
-      - traefik.http.middlewares.redirect.redirectregex.replacement=https://supergeekery.com
+      - traefik.http.middlewares.redirect.redirectregex.replacement=${REDIRECT_IP_ADDRESS_TO_URL}
