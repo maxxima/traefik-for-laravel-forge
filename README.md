@@ -12,6 +12,10 @@ The TLDR was that Traefik and Plausible were not always defaulting to use the sa
 
 This forked repo is an attempt to share what I discovered when getting Plausible to work with Traefik. This repo shows how I have Traefik configured to run on Laravel Forge.
 
+## The accompanying blog post
+
+For a complete write-up on using this repo, read [*Analytics a different way. Plausible Analytics on Laravel Forge with Traefik and Docker.*](https://supergeekery.com/blog/plausible-analytics-on-laravel-forge-with-traefik-and-docker)
+
 ## Getting started
 
 If you're just going to dive right in without reading the [original post](https://blog.jpat.dev/how-to-deploy-docker-applications-with-laravel-forge), be sure to set up the most basic server in Laravel Forge, a _Worker Server_, because it will have only minimal services installed. You'll need to install Docker and Docker Compose on your server. I've included a Laravel Forge Recipe that you can use to install Docker and Docker Compose. See the [Laravel Forge preparation](#laravel-forge-preparation) section below for more details.
