@@ -62,3 +62,24 @@ services:
       ## Middleware to catch all and redirect to domain, in this case, supergeekery.com, but update to your domain
       - traefik.http.middlewares.redirect.redirectregex.regex=.*
       - traefik.http.middlewares.redirect.redirectregex.replacement=${REDIRECT_IP_ADDRESS_TO_URL}
+
+  whatsapp-http-api-plus:
+    image: devlikeapro/whatsapp-http-api-plus
+    container_name: whatsapp-http-api-plus
+    ports:
+      - "3000:3000/tcp"
+    volumes:
+      - "./.sessions:/app/.sessions"
+    environment:
+      # Environment variables from https://waha.devlike.pro/docs/how-to/config/
+      - WHATSAPP_RESTART_ALL_SESSIONS=True
+      - WHATSAPP_START_SESSION=default
+      - WHATSAPP_HOOK_URL=https://httpbin.org/post
+      - WHATSAPP_HOOK_EVENTS=message
+      - WHATSAPP_DEFAULT_ENGINE=WEBJS
+      - WHATSAPP_API_KEY=${WHATSAPP_API_KEY}
+      - WHATSAPP_SWAGGER_USERNAME=${WHATSAPP_SWAGGER_USERNAME}
+      - WHATSAPP_SWAGGER_PASSWORD=${WHATSAPP_SWAGGER_PASSWORD}
+      - WHATSAPP_SWAGGER_CONFIG_ADVANCED=true
+      - WHATSAPP_API_HOSTNAME=localhost
+    restart: always      
