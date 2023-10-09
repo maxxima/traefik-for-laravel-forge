@@ -52,6 +52,8 @@ services:
 
   whatsapp:
     image: devlikeapro/whatsapp-http-api-plus
+    networks:
+      - web
     container_name: whatsapp-http-api-plus
     ports:
       - "3000:3000/tcp"
